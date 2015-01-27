@@ -1,7 +1,9 @@
 
 Test
 
-Italic (asterisk)  *this* *is* *starred* but not rest
+One star is *italic* and two stars are **bold**
+
+One underline is _italic_ and two underlines are __bold__
 
 Bold (underlne)  _this_ _is_ _starred_ but not rest
 
