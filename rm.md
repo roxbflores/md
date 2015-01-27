@@ -1,4 +1,47 @@
-Ttl  MINIMAL -- machine independent macro assembly lang.
+
+Test
+
+Italic (asterisk)  *this* *is* *starred* but not rest
+
+Bold (underlne)  _this_ _is_ _starred_ but not rest
+
+Bold (two stars)  **This text should be bold**
+
+* list one
+* list two
+* list three
+
+1 list one
+2 list two
+3 list three
+
+monospace font  here is a use of `edp` and the `do while` statement.
+And so `mov` is the mov opcode:  ` mov  eax,edx`
+
+
+fenced code block
+
+```
+   bss 1
+   bss 3
+   mov xl,xr
+```
+
+and wikh formatting (nasm)
+
+```nasm
+  mov edx,eax
+  push edx
+  jb   lab
+label: mov xs,xr
+```
+
+
+
+
+
+
+ MINIMAL -- machine independent macro assembly lang.
 
 The following sections describe the implementation language originally developed
 for SPITBOL but now more widely used. MINIMAL is an assembly language for an
