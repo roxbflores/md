@@ -197,52 +197,52 @@ The stack is used for s-r linkage and temporary data storage for which the stack
 arrangement is suitable.  XR,XL can also contain a character pointer in
 conjunction with the character instructions (see description of plc).  
 
-There are three work registers called WA,WB,WC which can contain any data item
+There are three work registers called __wa__,__wb__,__wc__ which can contain any data item
 which can be stored in a single memory word. In fact, the work registers are
 just like memory locations except that they have no addresses and are referenced
 in a special way by the instructions.
 
-Note that registers WA,WB have special uses in connection with the cvd, cvm,
-mvc, mvw, mWB, cmc, trc instructions.
+Note that registers __wa__,__wb__ have special uses in connection with the cvd, cvm,
+mvc, mvw, m__wb__, cmc, trc instructions.
 
-Register WC may overlap the integer accumulator (IA) in some implementations.
-Thus any operation changing the value in WC leaves (IA) undefined and vice versa
+Register __wc__ may overlap the integer accumulator (__ia__) in some implementations.
+Thus any operation changing the value in __wc__ leaves (__ia__) undefined and vice versa
 except as noted in the following restriction on simple dump/restore operations.
 
     restriction
     -----------
 
-If IA and WC overlap then
+If __ia__ and __wc__ overlap then
 
 ```
     sti  iasav
     ldi  iasav
 ```
 
-Does not change WC, and
+Does not change __wc__, and
 
 ```
-    mov  WC,WCsav
-    mov  WCsav,WC
+    mov  __wc__,__WC__sav
+    mov  __wc__sav,__WC__
 ```
 
-does not change IA.
+does not change __ia__.
 
 
 
-There is an integer accumulator (IA) which is capable of holding a signed
-integer value (CFP_I words long). Register WC may overlap the integer
-accumulator (IA) in some implementations. Thus any operation changing the value
-in WC leaves (IA) undefined and vice versa except as noted in the above
+There is an integer accumulator (__ia__) which is capable of holding a signed
+integer value (CFP_I words long). Register __wc__ may overlap the integer
+accumulator (__ia__) in some implementations. Thus any operation changing the value
+in __wc__ leaves (__ia__) undefined and vice versa except as noted in the above
 restriction on simple dump/restore operations.
 
 There is a single real accumulator (ra) which can hold any real value and is
 completely separate from any of the other registers or program accessible
 locations.
 
-The code pointer register (CP) is a special index register for use in
+The code pointer register (__cp__) is a special index register for use in
 implementations of interpretors.  It is used to contain a pseudo-code pointer
-and can only be affected by iCP, lCP, sCP and lcw instructions. 
+and can only be affected by i__cp__, l__cp__, s__cp__ and lcw instructions. 
 
 #  section 4 - the stack
 
@@ -275,19 +275,19 @@ opcodes applied to XS, XT. For example
 ```nasm
 MINIMAL           d-stack trans.  u-stack trans.
 
-mov  WA,-(XS)     sbi  XS,1       adi  XS,1
-                  sto  WA,(XS)    sto  WA,(XS)
-mov  (XT)+,WC     lod  WC,(XL)    lod  WC,(XL)
+mov  __wa__,-(XS)     sbi  XS,1       adi  XS,1
+                  sto  __wa__,(XS)    sto  __wa__,(XS)
+mov  (XT)+,__wc__     lod  __WC__,(XL)    lod  __WC__,(XL)
                   adi  XL,1       sbi  XL,1
 add  =seven,XS    adi  XS,7       sbi  XS,7
-mov  2(XT),WA     lod  WA,2(XL)   lod  WA,-2(XL)
+mov  2(XT),__wa__     lod  __wa__,2(XL)   lod  __wa__,-2(XL)
 ica  XS           adi  XS,1       sbi  XS,1
 ```
 note that forms such as
 
 ```nasm
-mov  -(XS),WA
-add  WA,(XS)+
+mov  -(XS),__wa__
+add  __wa__,(XS)+
 ```
 
 are illegal, since they assume information storage above the stack top.
@@ -461,7 +461,7 @@ le n le CFP_L.
 reg  07,08                      register
 
 reg is used to describe an operand which can be any of the registers
-(XL,XR,XS,XT,WA,WB,WC). Such an operand can hold a one word integer (address).
+(XL,XR,XS,XT,__wa__,__wb__,__wc__). Such an operand can hold a one word integer (address).
 
 opc  09,10,11                   character
 
@@ -479,7 +479,7 @@ opw  as for ops + 08,10,11      full word
 
 opw is used to refer to an operand whose capacity is that of a full memory word.
 opw includes all the possibilities for ops (the referenced word is used) plus
-The use of one of the three work registers (WA,WB,WC). In addition, the formats
+The use of one of the three work registers (__wa__,__wb__,__wc__). In addition, the formats
 (x)+ and -(x) allow indexed operations in which the index register is popped by
 one word after the reference (x)+, or pushed by one word before the reference
 -(x) these latter two formats provide a facility for manipulation of stacks. The
@@ -520,7 +520,7 @@ use with dac.
 ```
      ****************************************************
      *   in the following descriptions the usage --     *
-     *      (XL),(XR), ... ,(IA)                        *
+     *      (XL),(XR), ... ,(__ia__)                        *
      *   in the descriptive text signifies the          +
      *   contents of the stated register.               *
      ****************************************************
@@ -592,7 +592,7 @@ for details of statement format and comment conventions.
 12.2  exp               define eXTernal procedure
  6.10 flc  w            fold character to upper case
  2.3  ica  opn          increment address by one word
- 3.4  iCP               increment code pointer
+ 3.4  i__cp__               increment code pointer
  1.16 icv  opn          increment value by one
  4.11 ieq  plbl         jump if integer zero
  1.4  iff  val,plbl     specify branch for bsw
@@ -609,7 +609,7 @@ for details of statement format and comment conventions.
  1.9  jsr  pnam         call procedure
  6.3  lch  reg,opc      load character
  2.15 lct  w,opv        load counter for loop
- 3.1  lCP  reg          load code pointer register
+ 3.1  l__cp__  reg          load code pointer register
  3.3  lcw  reg          load neXT code word
  4.1  ldi  ops          load integer
  5.1  ldr  ops          load real
@@ -618,15 +618,15 @@ for details of statement format and comment conventions.
  7.6  lsh  w,val        left shift bit string
  7.8  lsx  w,(x)        left shift indexed
  9.4  mcb               move characterswords backwards
- 8.4  mfi* opn,plbl     convert (IA) to address value
+ 8.4  mfi* opn,plbl     convert (__ia__) to address value
  4.3  mli  ops          multiply integer
  5.5  mlr  ops          multiply real
  1.19 mnz  opn          move non-zero
  1.1  mov  opv,opn      move
- 8.3  mti  opn          move address value to (IA)
+ 8.3  mti  opn          move address value to (__ia__)
  9.1  mvc               move characters
  9.2  mvw               move words
- 9.3  mWB               move words backwards
+ 9.3  m__wb__               move words backwards
  4.8  ngi               negate integer
  5.9  ngr               negate real
  7.9  nzb  w,plbl       jump if not all zero bits
@@ -651,7 +651,7 @@ for details of statement format and comment conventions.
  4.4  sbi  ops          subtract integer
  5.4  sbr  ops          subtract reals
  6.4  sch  reg,opc      store character
- 3.2  sCP  reg          store code pointer
+ 3.2  s__cp__  reg          store code pointer
 14.1  sec               define start of assembly section
  5.21 sin               sine of real accum
  5.22 sqr               square root of real accum
@@ -872,14 +872,14 @@ file of error messages for documenting purposes or for building a direct access
 or other file of messages to be used by the error handling code.  In the event
 That an exi attempts to return control via an exit parameter to an err, control
 is instead passed to the first instruction in the error section (which follows
-The program section) with the error code in WA.
+The program section) with the error code in __wa__.
 
 1.15 erb  int,text    error branch
 
      
 This instruction resembles err except that it may occur at any point where a
 branch is permitted.  It effects a transfer of control to the error section with
-The error code in WA.
+The error code in __wa__.
 
 1.16 icv  opn         increment value by one
 
@@ -1010,7 +1010,7 @@ even.  Thus return address on the stack (.crpp) and entry point addresses
 (not a multiple of CFP_B).  BEV and BOD branch according as operand is even or
 odd, respectively.  
 
--3-  operations on the code pointer register (CP)
+-3-  operations on the code pointer register (__cp__)
 
      
 The code pointer register provides a psuedo instruction counter for use in an
@@ -1019,48 +1019,48 @@ but in either case it is separate from any other register. The value in the code
 pointer register is always a word address (i.e.  A one word integer which is a
 multiple of CFP_B).
 
-3.1  lCP  reg         
+3.1  l__cp__  reg         
 
 load code pointer register this instruction causes the code pointer register to
 be set from the value in reg which is unchanged
 
-3.2  sCP  reg         
+3.2  s__cp__  reg         
 
 store code pointer register this instruction loads the current value in the code
-pointer register into reg. (CP) is unchanged.
+pointer register into reg. (__cp__) is unchanged.
 
 3.3  lcw  reg         
 
-load neXT code word this instruction causes the word pointed to by CP to be
-loaded into the indicated reg. The value in CP is then incremented by one word.
+load neXT code word this instruction causes the word pointed to by __cp__ to be
+loaded into the indicated reg. The value in __cp__ is then incremented by one word.
 execution of lcw may destroy XL.
 
-3.4  iCP              increment CP by one word
+3.4  i__cp__              increment __cp__ by one word
 
      
-on machines with more than three index registers, CP can be treated simply as an
+on machines with more than three index registers, __cp__ can be treated simply as an
 index register.  In this case, the following equivalences apply.
 
 ```
-     lCP reg is like mov reg,CP
-     sCP reg is like mov CP,reg
-     lcw reg is like mov (CP)+,reg
-     iCP     is like ica CP
+     l__cp__ reg is like mov reg,__cp__
+     s__cp__ reg is like mov __cp__,reg
+     lcw reg is like mov (__cp__)+,reg
+     i__cp__     is like ica __cp__
 ```
      
 since lcw is allowed to destroy XL, the following implementation using a work
-location CP$$$ can also be used.
+location __cp__$$$ can also be used.
 
 ```
-     lCP  reg         mov  reg,CP$$$
+     l__cp__  reg         mov  reg,__cp__$$$
 
-     sCP  reg         mov  CP$$$,reg
+     s__cp__  reg         mov  __cp__$$$,reg
 
-     lcw  reg         mov  CP$$$,XL
+     lcw  reg         mov  __cp__$$$,XL
                       mov  (XL)+,reg
-                      mov  XL,CP$$$
+                      mov  XL,__cp__$$$
 
-     iCP              ica  CP$$$
+     i__cp__              ica  __cp__$$$
 ```
 
 -4-  operations on signed integer values
@@ -1082,34 +1082,34 @@ The equation satisfied by operands and results of dvi and rmi is
             div = qot * ops + rem          where
 
      div = dividend in integer accumulator
-     qot = quotient left in IA by div
+     qot = quotient left in __ia__ by div
      ops = the divisor
-     rem = remainder left in IA by rmi
+     rem = remainder left in __ia__ by rmi
 ```
      
-The sign of the result of dvi is + if (IA) and (ops) have the same sign and is -
-if they have opposite signs. The sign of (IA) is always used as the sign of the
-result of rem.  Assuming in each case that IA contains the number specified in
+The sign of the result of dvi is + if (__ia__) and (ops) have the same sign and is -
+if they have opposite signs. The sign of (__ia__) is always used as the sign of the
+result of rem.  Assuming in each case that __ia__ contains the number specified in
 parentheses and that seven and msevn hold +7 and -7 resp. The algorithm is
 illustrated below.
 
 ```
-     (IA = 13)
-     dvi  seven       IA = 1
-     rmi  seven       IA = 6
-     dvi  msevn       IA = -1
-     rmi  msevn       IA = 6
-     (IA = -13)
-     dvi  seven       IA = -1
-     rmi  seven       IA = -6
-     dvi  msevn       IA = 1
-     rmi  msevn       IA = -6
+     (__ia__ = 13)
+     dvi  seven       __ia__ = 1
+     rmi  seven       __ia__ = 6
+     dvi  msevn       __ia__ = -1
+     rmi  msevn       __ia__ = 6
+     (__ia__ = -13)
+     dvi  seven       __ia__ = -1
+     rmi  seven       __ia__ = -6
+     dvi  msevn       __ia__ = 1
+     rmi  msevn       __ia__ = -6
 ```
 
 The above instructions operate on a full range of signed integer values. with
 The exception of ldi and sti, these instructions may cause integer overflow by
 attempting to produce an undefined or out of range result in which case integer
-overflow is set, the result in (IA) is undefined and the following instruction
+overflow is set, the result in (__ia__) is undefined and the following instruction
 must be iov or ino.  Particular care may be needed on target machines having
 distinct overflow and divide by zero conditions.
 
@@ -1121,17 +1121,17 @@ These instructions can only occur immediately following an instruction which can
 cause integer overflow (adi, sbi, mli, dvi, rmi, ngi) and test the result of the
 preceding instruction.  IOV and INO may not have labels.
 
-4.11 ieq  plbl        jump to plbl if (IA) eq 0
-4.12 ige  plbl        jump to plbl if (IA) ge 0
-4.13 igt  plbl        jump to plbl if (IA) gt 0
-4.14 ile  plbl        jump to plbl if (IA) le 0
-4.15 ilt  plbl        jump to plbl if (IA) lt 0
-4.16 ine  plbl        jump to plbl if (IA) ne 0
+4.11 ieq  plbl        jump to plbl if (__ia__) eq 0
+4.12 ige  plbl        jump to plbl if (__ia__) ge 0
+4.13 igt  plbl        jump to plbl if (__ia__) gt 0
+4.14 ile  plbl        jump to plbl if (__ia__) le 0
+4.15 ilt  plbl        jump to plbl if (__ia__) lt 0
+4.16 ine  plbl        jump to plbl if (__ia__) ne 0
 
      
 The above conditional jump instructions do not change the contents of the
 accumulator.  On a ones complement machine, it is permissible to produce
-negative zero in IA provided these instructions operate correctly with such a
+negative zero in __ia__ provided these instructions operate correctly with such a
 value.  
 
 -5-  operations on real values
@@ -1306,7 +1306,7 @@ XL and XR should have been prepared by plc.  Control passes to first plbl if the
 first string is lexically less than the second string, and to the second plbl if
 The first string is lexically greater. control passes to the following
 instruction if the strings are identical.  After executing this instruction, the
-values of XR and XL are set to zero and the value in (WA) is undefined.
+values of XR and XL are set to zero and the value in (__wa__) is undefined.
 arguments to cmc may be complete or partial strings, so making optimisation to
 use whole word comparisons difficult (dependent in general on shifts and
 masking).
@@ -1320,12 +1320,12 @@ before executing trc the registers are set as follows.
      (XL)             char ptr to string to be translated
      (XR)             char ptr to translate table
 
-     (WA)             length of string to be translated
+     (__wa__)             length of string to be translated
 
      
 XL and XR should have been prepared by plc.  The translate table consists of
 CFP_A contiguous characters giving the translations of the CFP_A characters in
-The alphabet. on completion, (XR) and (XL) are set to zero and (WA) is
+The alphabet. on completion, (XR) and (XL) are set to zero and (__wa__) is
 undefined.
 
 6.10 flc  w           fold character to upper case
@@ -1399,7 +1399,7 @@ accumulator.
 The value currently stored in the integer accumulator is moved to opn as an
 address if it is in the range 0 to CFP_M inclusive.  If the accumulator value is
 outside this range, then the result in opn is undefined and control is passed to
-plbl. mfi destroys the value of (IA) whether or not integer overflow is
+plbl. mfi destroys the value of (__ia__) whether or not integer overflow is
 signalled.  PLBL may be omitted if overflow is impossible.
 
      
@@ -1413,7 +1413,7 @@ accumulator (may lose precision in some cases)
 
 8.6  rti  plbl        
 
-convert the real value in ra to an integer and place result in IA.  conversion
+convert the real value in ra to an integer and place result in __ia__.  conversion
 is by truncation of the fraction - no rounding occurs.  jump to plbl if out of
 range. (ra) is not changed in either case.  PLBL may be omitted if overflow is
 impossible.  
@@ -1427,8 +1427,8 @@ for a text string.
 8.7  ctw  w,val       
 
 This instruction computes the sum (number of words required to store w
-characters) + (val). The sum is stored in w.  For example, if CFP_C is 5, and WA
-contains 32, then ctw WA,2 gives a result of 9 in WA.
+characters) + (val). The sum is stored in w.  For example, if CFP_C is 5, and __wa__
+contains 32, then ctw __wa__,2 gives a result of 9 in __wa__.
 
 8.8  ctb  w,val       
 
@@ -1444,19 +1444,19 @@ be complemented.
 8.9  cvm  plbl        convert by multiplication
 
      
-The integer accumulator, which is zero or negative, is multiplied by 10. WB
+The integer accumulator, which is zero or negative, is multiplied by 10. __wb__
 contains the character code for a digit. The value of this digit is then
 subtracted from the result. If the result is out of range, then control is
-passed to plbl with the result in (IA) undefined. execution of cvm leaves the
-result in (WB) undefined.
+passed to plbl with the result in (__ia__) undefined. execution of cvm leaves the
+result in (__wb__) undefined.
 
 8.10 cvd              convert by division
 
      
 The integer accumulator, which is zero or negative, is divided by 10.  The
 quotient (zero or negative) is replaced in the accumulator. The remainder is
-converted to the character code of a digit and placed in WA. for example, an
-operand of -523 gives a quotient of -52 and a remainder in WA of ch_d3.  
+converted to the character code of a digit and placed in __wa__. for example, an
+operand of -523 gives a quotient of -52 and a remainder in __wa__ of ch_d3.  
 
 -9-  block move instructions
 
@@ -1465,31 +1465,31 @@ memory to another in blocks.  They can be implemented with the indicated series
 of other macro-instructions, but more efficient imple- mentations will be
 possible on most machines.
 
-note that in the equivalent code sequence shown below, a zero value in WA will
+note that in the equivalent code sequence shown below, a zero value in __wa__ will
 move at least one item, and may may wrap the counter causing a core dump in some
-imple- mentations.  Thus WA should be .gt. 0 prior to invoking any of these
+imple- mentations.  Thus __wa__ should be .gt. 0 prior to invoking any of these
 block move instructions.
 
 9.1  mvc              move characters
 
      
-before obeying this order WA,XL,XR should have been set up, the latter two by
+before obeying this order __wa__,XL,XR should have been set up, the latter two by
 plc, psc resp.
 
      
 mvc is equivalent to the sequence
 
 ```nasm
-            mov  WB,dumpb
-            lct  WA,WA
-     loopc  lch  WB,(XL)+
-            sch  WB,(XR)+
-            bct  WA,loopc
+            mov  __wb__,dumpb
+            lct  __wa__,__wa__
+     loopc  lch  __wb__,(XL)+
+            sch  __wb__,(XR)+
+            bct  __wa__,loopc
             csc  XR
-            mov  dumpb,WB
+            mov  dumpb,__wb__
 ```
      
-The character pointers are bumped as indicated and the final value of WA is
+The character pointers are bumped as indicated and the final value of __wa__ is
 undefined.
 
 
@@ -1500,31 +1500,31 @@ mvw is equivalent to the sequence
 
 ```nasm
      loopw  mov  (XL)+,(XR)+
-            dca  WA               WA = bytes to move
-            bnz  WA,loopw
+            dca  __wa__               __wa__ = bytes to move
+            bnz  __wa__,loopw
 ```
      
-note that this implies that the value in WA is the length in bytes which is a
+note that this implies that the value in __wa__ is the length in bytes which is a
 multiple of CFP_B.  The initial addresses in XR,XL are word addresses.  As
 indicated, the final XR,XL values point past the new and old regions of memory
-respectively.  The final value of WA is undefined.  WA,XL,XR must be set up
+respectively.  The final value of __wa__ is undefined.  __wa__,XL,XR must be set up
 before obeying mvw.
 
-9.3  mWB              move words backwards
+9.3  m__wb__              move words backwards
 
      
-mWB is equivalent to the sequence
+m__wb__ is equivalent to the sequence
 
 ```nasm
      loopb  mov  -(XL),-(XR)
-            dca  WA               WA = bytes to move
-            bnz  WA,loopb
+            dca  __wa__               __wa__ = bytes to move
+            bnz  __wa__,loopb
 ```
      
 There is a requirement that the initial value in XL be at least 256 less than
 The value in XR. This allows an implementation in which chunks of 256 bytes are
-moved forward (ibm 360, icl 1900).  The final value of WA is undefined.
-WA,XL,XR must be set up before obeying mWB.
+moved forward (ibm 360, icl 1900).  The final value of __wa__ is undefined.
+__wa__,XL,XR must be set up before obeying m__wb__.
 
 9.4  mcb              move characters backwards
 
@@ -1532,19 +1532,19 @@ WA,XL,XR must be set up before obeying mWB.
 mcb is equivalent to the sequence
 
 ```nasm
-            mov  WB,dumpb
-            lct  WA,WA
-     loopc  lch  WB,-(XL)
-            sch  WB,-(XR)
-            bct  WA,loopc
+            mov  __wb__,dumpb
+            lct  __wa__,__wa__
+     loopc  lch  __wb__,-(XL)
+            sch  __wb__,-(XR)
+            bct  __wa__,loopc
             csc  XR
-            mov  dumpb,WB
+            mov  dumpb,__wb__
 ```
      
 There is a requirement that the initial value in XL be at least 256 less than
 The value in XR. This allows an implementation in which chunks of 256 bytes are
-moved forward (ibm 360, icl 1900).  The final value of WA is undefined.
-WA,XL,XR must be set up before obeying mcb.
+moved forward (ibm 360, icl 1900).  The final value of __wa__ is undefined.
+__wa__,XL,XR must be set up before obeying mcb.
 
 
 -10- operations connected with the stack
@@ -1800,7 +1800,7 @@ of initialisation and exp routines as osint (operating system interface).
 errors occurring within osint procedures are usually handled by making an error
 return. If this is not feasible or appropriate, osint may use the MINIMAL error
 section to report errors directly by branching to it with a suitable numeric
-error code in WA.
+error code in __wa__.
 
 
 section 11 - statement format
@@ -1885,9 +1885,9 @@ registers at the start of program execution as follows.
 (XL)                  address of the last word in the
                       data area.
 
-(WA)                  initial stack pointer
+(__wa__)                  initial stack pointer
 
-(WB,WC,IA,RA,CP)      zero
+(__wb__,__wc__,__ia__,__ra__,__cp__)      zero
 ```
 
 There is no explicit way to terminate the execution of a program. This function
