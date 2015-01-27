@@ -1,4 +1,5 @@
 
+Bold (underlne)  _this_ _is_ _starred_ but not rest
 Test
 
 One star is *italic* and two stars are **bold**
@@ -20,7 +21,7 @@ Bold (two stars)  **This text should be bold**
 starred font  here is a use of *edp* and the *do while* statement.
 And so *mov* is the mov opcode:  * mov  eax,edx*
 
-underlned font  here is a use of _edp_ and the _do while_ statement.
+underlined font  here is a use of _edp_ and the _do while_ statement.
 And so _mov_ is the mov opcode:  _ mov  eax,edx_
 
 monospace font  here is a use of `edp` and the `do while` statement.
@@ -38,7 +39,7 @@ fenced code block
 ```
    bss 1
    bss 3
-   mov xl,xr
+   mov __xl__,__xr__
 ```
 
 and wikh formatting (nasm)
@@ -47,7 +48,7 @@ and wikh formatting (nasm)
   mov edx,eax
   push edx
   jb   lab
-label: mov xs,xr
+label: mov __xs__,__xr__
 ```
 
 
@@ -415,33 +416,33 @@ The following section describes the various possibilities for operands of
 instructions and assembly operations.
 
 ```
-01   int              unsigned integer le CFP_L
-02   dlbl             symbol defined in definitions sec
-03   wlbl             label in working storage section
-04   clbl             label in constant section
-05   elbl             program section entry label
-06   plbl             program section label (non-entry)
-07   x                one of the three index registers
-08   w                one of the three work registers
-09   (x)              location indexed by x
-10   (x)+             like (x) but post increment x
-11   -(x)             like (x) but predecrement x
-12   int(x)           location int words beyond addr in x
-13   dlbl(x)          location dlbl words past addr in x
-14   clbl(x)          location (x) bytes beyond clbl
-15   wlbl(x)          location (x) bytes beyond wlbl
-16   integer          signed integer (dic)
-17   real             signed real (drc)
-18   =dlbl            location containing dac dlbl
-19   *dlbl            location containing dac CFP_B*dlbl
-20   =wlbl            location containing dac wlbl
-21   =clbl            location containing dac clbl
-22   =elbl            location containing dac elbl
-23   pnam             procedure label (on prc instruc)
-24   eqop             operand for equ instruction
-25   ptyp             procedure type (see prc)
-26   text             arbitrary text (erb,err,ttl)
-27   dtext            delimited text string (dtc)
+01   _int_              unsigned integer le CFP_L
+02   _dlbl_             symbol defined in definitions sec
+03   _wlbl_             label in working storage section
+04   _clbl_             label in constant section
+05   _elbl_             program section entry label
+06   _plbl_             program section label (non-entry)
+07   _x_                one of the three index registers
+08   _w_                one of the three work registers
+09   _(x)_              location indexed by _x_
+10   _(x)+_             like (_x_) but post increment _x_
+11   _-(x)_             like (_x_) but predecrement _x_
+12   _int(x)_           location int words beyond addr in _x_
+13   _dlbl(x)_          location dlbl words past addr in x
+14   _clbl(x)_          location (_x_) bytes beyond clbl
+15   _wlbl(x)_          location (_x_) bytes beyond wlbl
+16   _integer_          signed integer (dic)
+17   _real_             signed real (drc)
+18   _=dlbl_            location containing dac dlbl
+19   _*dlbl_            location containing dac CFP_B*dlbl
+20   _=wlbl_            location containing dac wlbl
+21   _=clbl_            location containing dac clbl
+22   _=elbl_            location containing dac elbl
+23   _pnam_             procedure label (on prc instruc)
+24   _eqop_             operand for equ instruction
+25   _ptyp_             procedure type (see prc)
+26   _text_             arbitrary text (__erb__,__err__,__ttl__)
+27   _dtext_            delimited text string (dtc)
 ```
 
 The numbers in the above list are used in subsequent description and in some of
