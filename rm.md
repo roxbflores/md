@@ -18,6 +18,12 @@ Bold (two stars)  **This text should be bold**
 monospace font  here is a use of `edp` and the `do while` statement.
 And so `mov` is the mov opcode:  ` mov  eax,edx`
 
+Here is straight link: http://github.com/hardbol/spitbol
+
+Here is bracket and paren line [http://github.com/daveshields/md](md test repository)
+
+
+
 
 fenced code block
 
