@@ -15,8 +15,11 @@ Bold (two stars)  **This text should be bold**
 2 list two
 3 list three
 
-boldspace font  here is a use of *edp* and the *do while* statement.
+starred font  here is a use of *edp* and the *do while* statement.
 And so *mov* is the mov opcode:  * mov  eax,edx*
+
+underlned font  here is a use of _edp_ and the _do while_ statement.
+And so _mov_ is the mov opcode:  _ mov  eax,edx_
 
 monospace font  here is a use of `edp` and the `do while` statement.
 And so `mov` is the mov opcode:  ` mov  eax,edx`
